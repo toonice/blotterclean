@@ -12,9 +12,7 @@
       <h1>BlotterClean</h1>
       <p>Drop a broker export. Get a clean blotter. Files never leave this browser.</p>
     </header>
-
     <div id="detect" class="detect">Detected: —</div>
-
     <div class="grid">
       <section class="card">
         <h2>1. Source file</h2>
@@ -29,6 +27,8 @@
           <option value="samples/schwab.csv">Schwab</option>
           <option value="samples/robinhood.csv">Robinhood</option>
           <option value="samples/trading212.csv">Trading 212</option>
+          <option value="samples/german_semicolon.csv">German ; export</option>
+          <option value="samples/bs_codes.csv">B/S codes</option>
         </select>
         <label for="csv">Or paste CSV</label>
         <textarea id="csv" placeholder="Paste any broker trade CSV"></textarea>
@@ -38,7 +38,6 @@
         </div>
         <div id="msg" class="msg"></div>
       </section>
-
       <section class="card">
         <h2>2. Position size</h2>
         <label for="account">Account ($)</label>
@@ -57,14 +56,12 @@
         <div id="sizerOut" class="sizer-out">Fill entry and stop, then size.</div>
       </section>
     </div>
-
     <div class="stats">
       <div class="stat"><div class="k">Trades</div><div class="v" id="statTrades">0</div></div>
       <div class="stat"><div class="k">Fees</div><div class="v" id="statFees">$0.00</div></div>
       <div class="stat"><div class="k">Realized P&amp;L</div><div class="v" id="statPnl">n/a</div></div>
       <div class="stat"><div class="k">Days</div><div class="v" id="statDays">0</div></div>
     </div>
-
     <div id="tableWrap" class="table-wrap"></div>
     <p class="fine">Parses in your browser. Not tax, compliance, or investment advice. Verify against the broker statement.</p>
   </div>

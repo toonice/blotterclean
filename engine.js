@@ -1,14 +1,14 @@
-/* BlotterClean engine */
+/* BlotterClean engine — scored headers, broker fingerprints, locale numbers */
 const FIELD_LEX = {
-  date: ["date", "datetime", "date time", "trade date", "tradedate", "run date", "activity date", "exec time", "time", "settlement date", "settle date", "process date"],
-  symbol: ["symbol", "ticker", "instrument", "underlying", "isin"],
-  side: ["side", "buy sell", "buysell", "action", "trans code", "transaction type", "transaction", "type", "direction", "pos effect"],
-  qty: ["qty", "quantity", "shares", "size", "filled qty", "filled", "no of shares", "no. of shares", "volume", "fill qty"],
-  price: ["price", "tradeprice", "trade price", "fill price", "avg price", "average price", "price share", "price / share", "net price", "unit price"],
-  fee: ["commission", "ibcommission", "fees", "fee", "comm", "comm fee", "fees comm", "fees and comm", "charge amount", "brokerage"],
-  fee2: ["fees", "reg fee", "fee"],
+  date: ["date", "datetime", "date time", "trade date", "tradedate", "run date", "activity date", "exec time", "time", "process date", "datum", "tradezeit"],
+  symbol: ["symbol", "ticker", "instrument", "underlying", "isin", "sym", "wertpapier"],
+  side: ["side", "buy sell", "buysell", "buy/sell", "b/s", "bs", "action", "trans code", "transaction type", "direction", "pos effect", "seite", "richtung"],
+  qty: ["qty", "quantity", "shares", "size", "filled qty", "filled", "no of shares", "no. of shares", "volume", "fill qty", "stueck", "stuck", "anzahl", "menge"],
+  price: ["price", "tradeprice", "trade price", "fill price", "avg price", "average price", "price share", "price / share", "net price", "unit price", "preis", "kurs", "px"],
+  fee: ["commission", "ibcommission", "fees", "fee", "comm", "comm fee", "fees comm", "fees and comm", "charge amount", "brokerage", "gebuehr", "gebuhr", "kosten"],
+  fee2: ["reg fee", "fees $"],
   pnl: ["fifopnlrealized", "realized pnl", "realized p l", "realizedpl", "pnl", "result", "gain loss", "profit"],
-  proceeds: ["proceeds", "amount", "net amount", "value", "total", "debit credit"],
+  proceeds: ["proceeds", "amount", "net amount", "value", "total", "debit credit"]
 };
 const BROKERS = [
   { name: "Fidelity", need: ["run date", "action", "symbol"] },
@@ -21,10 +21,10 @@ const BROKERS = [
   { name: "Trading 212", need: ["ticker", "charge amount"] },
   { name: "thinkorswim", need: ["exec time", "pos effect"] },
   { name: "Webull", need: ["filled qty", "avg price"] },
-  { name: "E*TRADE", need: ["transaction date", "transaction type"] },
+  { name: "E*TRADE", need: ["transaction date", "transaction type"] }
 ];
 const CASH_RE = /deposit|withdraw|transfer|interest|dividend|journal|ach|wire|cdiv|eft/i;
-const TRADE_ACTION_RE = /you bought|you sold|market buy|market sell|limit buy|limit sell|\bbuy\b|\bsell\b|\bbought\b|\bsold\b|\blong\b|\bshort\b|\bbto\b|\bstc\b|\bsto\b|\bbtc\b/i;
+const TRADE_ACTION_RE = /you bought|you sold|market buy|market sell|limit buy|limit sell|\bbuy\b|\bsell\b|\bbought\b|\bsold\b|\blong\b|\bshort\b|\bbto\b|\bstc\b|\bsto\b|\bbtc\b|\bkauf\b|\bverkauf\b/i;
 function norm(s) {
   return String(s || "").toLowerCase().replace(/[$()]/g, " ").replace(/&/g, " ").replace(/[^a-z0-9./]+/g, " ").replace(/\s+/g, " ").trim();
 }
@@ -43,7 +43,7 @@ function scoreHeader(headerName, lexicon) {
   return best;
 }
 function detectDelim(text) {
-  const line = text.split(/\r?\n/).find((l) => l.includes(",") || l.includes(";") || l.includes("\t")) || "";
+  const line = text.split(/\r?\n/).find((l) => (l.match(/,/g) || []).length + (l.match(/;/g) || []).length + (l.match(/\t/g) || []).length >= 2) || "";
   const counts = { ",": 0, ";": 0, "\t": 0 };
   for (const ch of line) if (ch in counts) counts[ch]++;
   return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0] || ",";
@@ -68,7 +68,7 @@ function parseCsv(text) {
 function headerLikelihood(row) {
   const joined = row.map(norm).join(" ");
   let hits = 0;
-  ["date", "symbol", "ticker", "qty", "quantity", "price", "action", "side", "commission", "instrument"].forEach((k) => { if (joined.includes(k)) hits++; });
+  ["date", "datum", "symbol", "ticker", "qty", "quantity", "price", "preis", "action", "side", "commission", "instrument"].forEach((k) => { if (joined.includes(k)) hits++; });
   return hits;
 }
 function findHeaderIndex(rows) {
@@ -111,11 +111,15 @@ function parseNumber(v) {
   return neg ? -Math.abs(n) : n;
 }
 function inferSide(raw, qty, proceeds) {
-  const s = String(raw || "").toLowerCase();
-  if (/you bought|market buy|limit buy|\bbought\b|\bbto\b|\bbtc\b|\blong\b/.test(s)) return "BUY";
-  if (/you sold|market sell|limit sell|\bsold\b|\bstc\b|\bsto\b|\bshort\b/.test(s)) return "SELL";
-  if (/\bbuy\b|\bb\b/.test(s) && !/sell/.test(s)) return "BUY";
-  if (/\bsell\b|\bs\b/.test(s)) return "SELL";
+  const s = String(raw || "").trim().toLowerCase();
+  if (s === "b" || s === "k" || s === "kauf" || s === "achat") return "BUY";
+  if (s === "s" || s === "v" || s === "verkauf" || s === "vente") return "SELL";
+  if (/you bought|market buy|limit buy|\bbought\b|\bbto\b|\bbtc\b|\blong\b|\bkauf\b/.test(s)) return "BUY";
+  if (/you sold|market sell|limit sell|\bsold\b|\bstc\b|\bsto\b|\bshort\b|\bverkauf\b/.test(s)) return "SELL";
+  if (/\bbuy\b/.test(s) && !/sell/.test(s)) return "BUY";
+  if (/\bsell\b/.test(s)) return "SELL";
+  if (/^b\b/.test(s) && !/s/.test(s)) return "BUY";
+  if (/^s\b/.test(s)) return "SELL";
   if (qty != null && qty < 0) return "SELL";
   if (qty != null && qty > 0 && !raw) return "BUY";
   if (proceeds != null && proceeds < 0) return "BUY";
@@ -129,6 +133,7 @@ function isCashRow(symbol, action, blob) {
   return false;
 }
 function cleanTrades(text) {
+  text = String(text || "").replace(/^\uFEFF/, "");
   const { rows } = parseCsv(text);
   if (!rows.length) return empty("Empty file.");
   const hi = findHeaderIndex(rows);

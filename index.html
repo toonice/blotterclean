@@ -3,26 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BlotterClean — messy broker CSV to a clean blotter</title>
+  <title>BlotterClean — messy broker CSV to a clean trade blotter</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="wrap">
     <header>
       <h1>BlotterClean</h1>
-      <p>Upload or paste a broker CSV. Get a clean trade list, fees, and optional day P&amp;L. Nothing is uploaded to a server.</p>
+      <p>Drop a broker export. Get a clean blotter. Files never leave this browser.</p>
     </header>
+
+    <div id="detect" class="detect">Detected: —</div>
 
     <div class="grid">
       <section class="card">
         <h2>1. Source file</h2>
         <label for="file">Upload CSV</label>
         <input id="file" type="file" accept=".csv,text/csv,text/plain" />
+        <label for="sampleSel">Or load a sample</label>
+        <select id="sampleSel">
+          <option value="">Choose a broker sample…</option>
+          <option value="samples/generic.csv">Generic</option>
+          <option value="samples/ibkr_flex_like.csv">Interactive Brokers (Flex-like)</option>
+          <option value="samples/fidelity.csv">Fidelity</option>
+          <option value="samples/schwab.csv">Schwab</option>
+          <option value="samples/robinhood.csv">Robinhood</option>
+          <option value="samples/trading212.csv">Trading 212</option>
+        </select>
         <label for="csv">Or paste CSV</label>
-        <textarea id="csv" placeholder="date,symbol,side,qty,price,commission"></textarea>
+        <textarea id="csv" placeholder="Paste any broker trade CSV"></textarea>
         <div class="row">
           <button id="parseBtn" type="button">Clean blotter</button>
-          <button id="sampleBtn" class="ghost" type="button">Load sample</button>
           <button id="exportBtn" class="ghost" type="button" disabled>Export CSV</button>
         </div>
         <div id="msg" class="msg"></div>
@@ -55,8 +66,9 @@
     </div>
 
     <div id="tableWrap" class="table-wrap"></div>
-    <p class="fine">V1 maps generic and IBKR-like headers. Not tax, compliance, or investment advice. Verify against the broker statement.</p>
+    <p class="fine">Parses in your browser. Not tax, compliance, or investment advice. Verify against the broker statement.</p>
   </div>
+  <script src="engine.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

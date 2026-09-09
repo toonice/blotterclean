@@ -45,6 +45,8 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 th { color: var(--muted); font-weight: 600; background: #10151b; position: sticky; top: 0; }
+select { width: 100%; background: #0e1217; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.detect { background: #10231c; border: 1px solid #1e4a38; color: var(--accent); border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; font-weight: 650; }
 .msg { color: var(--warn); font-size: 13px; min-height: 1.2em; margin-top: 8px; }
 .fine { color: var(--muted); font-size: 12px; margin-top: 16px; }
 .sizer-out { background: #0e1217; border-radius: 10px; padding: 10px; margin-top: 10px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; white-space: pre-wrap; }

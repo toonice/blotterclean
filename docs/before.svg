@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="280" viewBox="0 0 920 280">
+  <rect width="920" height="280" rx="12" fill="#14181e" stroke="#262c35"/>
+  <text x="20" y="28" fill="#8b96a5" font-family="ui-monospace,Menlo,monospace" font-size="13">messy broker export.csv</text>
+  <text x="20" y="58" fill="#f3c16b" font-family="ui-monospace,Menlo,monospace" font-size="12">Run Date,Action,Symbol,Security Description,Quantity,Price ($),Commission ($),Fees ($),Amount ($)</text>
+  <text x="20" y="84" fill="#e8edf2" font-family="ui-monospace,Menlo,monospace" font-size="12">09/02/2026,YOU BOUGHT,AAPL,APPLE INC,100,"$228.40",$1.00,$0.00,"($22,841.00)"</text>
+  <text x="20" y="108" fill="#8b96a5" font-family="ui-monospace,Menlo,monospace" font-size="12">09/02/2026,DIVIDEND RECEIVED,AAPL,APPLE INC,, , , ,$24.70</text>
+  <text x="20" y="132" fill="#e8edf2" font-family="ui-monospace,Menlo,monospace" font-size="12">09/02/2026,YOU SOLD,AAPL,APPLE INC,100,"$231.10",$1.00,$0.00,"$23,109.00"</text>
+  <text x="20" y="156" fill="#8b96a5" font-family="ui-monospace,Menlo,monospace" font-size="12">09/03/2026,Electronic Fund Transfer,,,,,,, $1,500.00</text>
+  <text x="20" y="180" fill="#e8edf2" font-family="ui-monospace,Menlo,monospace" font-size="12">09/03/2026,YOU BOUGHT,MSFT,MICROSOFT CORP,40,"$412.25",$1.00,$0.00,"($16,491.00)"</text>
+  <text x="20" y="204" fill="#8b96a5" font-family="ui-monospace,Menlo,monospace" font-size="12">09/04/2026,INTEREST PAID,,,,,,,, $3.21</text>
+  <text x="20" y="228" fill="#e8edf2" font-family="ui-monospace,Menlo,monospace" font-size="12">09/04/2026,YOU SOLD,MSFT,MICROSOFT CORP,40,"$408.90",$1.00,$0.00,"$16,355.00"</text>
+  <text x="20" y="258" fill="#f07178" font-family="ui-sans-serif,system-ui" font-size="13">Cash, dividends, $ signs, parentheses, mixed actions — not a blotter.</text>
+</svg>
